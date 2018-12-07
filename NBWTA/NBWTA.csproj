@@ -71,6 +71,7 @@
     <Compile Include="Utils\Line.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NBWTA.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
