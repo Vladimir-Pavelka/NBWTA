@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8B928C07-6312-4571-9796-01E3F3E912CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Analyzer</RootNamespace>
+    <AssemblyName>Analyzer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChokePointsDetection\Choke.cs" />
+    <Compile Include="ChokePointsDetection\ChokeBorder.cs" />
+    <Compile Include="ChokePointsDetection\ChokePointsDetector.cs" />
+    <Compile Include="IMapAnalyzer.cs" />
+    <Compile Include="Utils\Clustering.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Mapping\Dictionary.cs" />
+    <Compile Include="DistanceTransformation\Clearance.cs" />
+    <Compile Include="DistanceTransformation\DistanceTransform.cs" />
+    <Compile Include="DistanceTransformation\PerpendicularClearance.cs" />
+    <Compile Include="Graph\Edge.cs" />
+    <Compile Include="Graph\GridGraph.cs" />
+    <Compile Include="Graph\Node.cs" />
+    <Compile Include="Graph\VertexEdgeGraph.cs" />
+    <Compile Include="Graph\Vertex.cs" />
+    <Compile Include="Skeletonization\HilditchThinning.cs" />
+    <Compile Include="MapAnalyzer.cs" />
+    <Compile Include="Preprocessing\Preprocessing.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pruning\Pruning.cs" />
+    <Compile Include="RegionDetection\Region.cs" />
+    <Compile Include="RegionDetection\RegionDetector.cs" />
+    <Compile Include="Result\AnalyzedMap.cs" />
+    <Compile Include="Utils\FloodFill.cs" />
+    <Compile Include="Utils\Line.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
