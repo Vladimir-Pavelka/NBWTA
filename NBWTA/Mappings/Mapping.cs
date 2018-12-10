@@ -1,4 +1,4 @@
-﻿namespace NBWTA.Mapping
+﻿namespace NBWTA.Mappings
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,7 +7,7 @@
     using RegionDetection;
     using Utils;
 
-    public static class Dictionary
+    public static class Mapping
     {
         public static bool[,] CreateTileIsChokeMap(int width, int height, IEnumerable<ChokeBorder> chokes)
         {

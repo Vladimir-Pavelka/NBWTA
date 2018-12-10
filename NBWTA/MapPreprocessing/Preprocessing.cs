@@ -1,4 +1,4 @@
-﻿namespace NBWTA.Preprocessing
+﻿namespace NBWTA.MapPreprocessing
 {
     using System.Collections.Generic;
     using System.Linq;

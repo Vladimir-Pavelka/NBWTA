@@ -6,7 +6,9 @@
     using ChokePointsDetection;
     using DistanceTransformation;
     using Graph;
-    using Mapping;
+    using Mappings;
+    using MapPreprocessing;
+    using MedialAxisPruning;
     using RegionDetection;
     using Result;
     using Skeletonization;
@@ -20,24 +22,24 @@
         public AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkable)
         {
             var map = Create2DBoolMap(width, height, isWalkable);
-            var preprocessedMap = Preprocessing.Preprocessing.RemoveTinyIsolatedObstacles(map);
+            var preprocessedMap = Preprocessing.RemoveTinyIsolatedObstacles(map);
             var clearance = DistanceTransform.Process(preprocessedMap);
             var graphEightNeighbors = GridGraph.Convert(preprocessedMap, NeighborsMode.EightNeighbors); // TODO: we dont even really need the mode
             ShrinkGraphToAccelerateSkeletonization(graphEightNeighbors, clearance, ShrinkMinClearance); // TODO: optional.. potentially harmful
             var skeleton = HilditchThinning.Skeletonize(graphEightNeighbors).ToList();
             var connectedVertexEdgeGraph = ConnectAsVertexEdgeGraph(skeleton);
-            var prunedSkeleton = Pruning.Pruning.Prune(connectedVertexEdgeGraph, clearance, PruningMinClearance);
+            var prunedSkeleton = Pruning.Prune(connectedVertexEdgeGraph, clearance, PruningMinClearance);
 
             var graphFourNeighbors = GridGraph.Convert(preprocessedMap, NeighborsMode.FourNeighbors); // TODO: we dont even really need the mode
             var chokeBorders = ChokePointsDetector.GetChokeBorders(prunedSkeleton, tile => IsWallOrOutOfBounds(tile, preprocessedMap));
-            var tileIsChokeMap = Dictionary.CreateTileIsChokeMap(width, height, chokeBorders);
+            var tileIsChokeMap = Mapping.CreateTileIsChokeMap(width, height, chokeBorders);
             SetChokeTilesAsWall(graphFourNeighbors, tileIsChokeMap);
-            var tileNodeMap = Dictionary.CreateTileNodeMap(width, height, graphFourNeighbors);
+            var tileNodeMap = Mapping.CreateTileNodeMap(width, height, graphFourNeighbors);
 
             var allRegions = RegionDetector.FindRegions(graphFourNeighbors, tileNodeMap, (x, y) => tileNodeMap[x, y].BelongsToShape).ToList();
-            var pointRegionMap = Dictionary.CreateNodeRegionMap(width, height, allRegions);
-            var chokeRegionMap = Dictionary.CreateChokeRegionMap(chokeBorders, pointRegionMap);
-            var regionChokeMap = Dictionary.CreateRegionChokeMap(chokeRegionMap);
+            var pointRegionMap = Mapping.CreateNodeRegionMap(width, height, allRegions);
+            var chokeRegionMap = Mapping.CreateChokeRegionMap(chokeBorders, pointRegionMap);
+            var regionChokeMap = Mapping.CreateRegionChokeMap(chokeRegionMap);
 
             var chokes = ChokePointsDetector.CreateFilledChokeRegions(chokeBorders, chokeRegionMap, regionChokeMap, tileNodeMap);
             var allChokeNodes = chokes.SelectMany(ch => ch.Fill).ToHashSet();

@@ -51,7 +51,7 @@
     <Compile Include="IMapAnalyzer.cs" />
     <Compile Include="Utils\Clustering.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Mapping\Dictionary.cs" />
+    <Compile Include="Mappings\Mapping.cs" />
     <Compile Include="DistanceTransformation\Clearance.cs" />
     <Compile Include="DistanceTransformation\DistanceTransform.cs" />
     <Compile Include="DistanceTransformation\PerpendicularClearance.cs" />
@@ -62,9 +62,9 @@
     <Compile Include="Graph\Vertex.cs" />
     <Compile Include="Skeletonization\HilditchThinning.cs" />
     <Compile Include="MapAnalyzer.cs" />
-    <Compile Include="Preprocessing\Preprocessing.cs" />
+    <Compile Include="MapPreprocessing\Preprocessing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pruning\Pruning.cs" />
+    <Compile Include="MedialAxisPruning\Pruning.cs" />
     <Compile Include="RegionDetection\Region.cs" />
     <Compile Include="RegionDetection\RegionDetector.cs" />
     <Compile Include="Result\AnalyzedMap.cs" />

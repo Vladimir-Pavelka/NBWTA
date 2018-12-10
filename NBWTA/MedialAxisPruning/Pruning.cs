@@ -1,4 +1,4 @@
-﻿namespace NBWTA.Pruning
+﻿namespace NBWTA.MedialAxisPruning
 {
     using System.Collections.Generic;
     using System.Linq;
