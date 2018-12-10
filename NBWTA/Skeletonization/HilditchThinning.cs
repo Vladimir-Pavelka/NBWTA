@@ -9,7 +9,7 @@
     /// Implemented as described at
     /// http://cgm.cs.mcgill.ca/~godfried/teaching/projects97/azar/skeleton.html
     /// </summary>
-    public static class HilditchThinning
+    internal static class HilditchThinning
     {
         public static IEnumerable<Node> Skeletonize(IEnumerable<Node> graph)
         {

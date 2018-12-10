@@ -6,7 +6,7 @@
     using Graph;
     using Utils;
 
-    public static class RegionDetector
+    internal static class RegionDetector
     {
         public static IEnumerable<Region<Node>> FindRegions(IReadOnlyCollection<Node> mapNodes, Node[,] nodesMap, Func<int, int, bool> isValid)
         {

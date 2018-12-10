@@ -9,7 +9,7 @@
     using RegionDetection;
     using Utils;
 
-    public static class ChokePointsDetector
+    internal static class ChokePointsDetector
     {
         public static IReadOnlyCollection<ChokeBorder> GetChokeBorders(IReadOnlyCollection<Vertex> connectedGraph, Func<(int x, int y), bool> isWall)
         {

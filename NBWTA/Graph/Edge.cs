@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Edge
+    internal class Edge
     {
         public IReadOnlyCollection<Node> Path { get; }
         public Vertex ConnectedVertex { get; }

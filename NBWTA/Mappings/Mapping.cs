@@ -7,7 +7,7 @@
     using RegionDetection;
     using Utils;
 
-    public static class Mapping
+    internal static class Mapping
     {
         public static bool[,] CreateTileIsChokeMap(int width, int height, IEnumerable<ChokeBorder> chokes)
         {

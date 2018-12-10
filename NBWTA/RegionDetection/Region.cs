@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class Region<TNode>
+    internal class Region<TNode>
     {
         public HashSet<TNode> Nodes { get; }
 

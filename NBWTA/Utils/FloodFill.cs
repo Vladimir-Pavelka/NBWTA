@@ -7,7 +7,7 @@
 
     public static class FloodFill
     {
-        public static IEnumerable<Node> Naive(Node start)
+        internal static IEnumerable<Node> Naive(Node start)
         {
             var openList = new HashSet<Node> { start };
             var closedList = new HashSet<Node>();

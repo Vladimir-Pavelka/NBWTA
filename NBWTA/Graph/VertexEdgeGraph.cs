@@ -4,7 +4,7 @@
     using System.Linq;
     using Utils;
 
-    public static class VertexEdgeGraph
+    internal static class VertexEdgeGraph
     {
         public static void SetConnectingNeighbors(IEnumerable<Node> skeleton) =>
             skeleton.ForEach(node => node.Neighbors = GetConnectingNeighbors(node).ToList());

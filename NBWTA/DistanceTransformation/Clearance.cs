@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Clearance
+    internal class Clearance
     {
         public int Top { get; set; }
         public int TopRight { get; set; }

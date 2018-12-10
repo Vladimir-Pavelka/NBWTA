@@ -5,7 +5,7 @@
     using RegionDetection;
     using Utils;
 
-    public static class Preprocessing
+    internal static class Preprocessing
     {
         public static bool[,] RemoveTinyIsolatedObstacles(bool[,] shape)
         {

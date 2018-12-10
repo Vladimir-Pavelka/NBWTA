@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Drawing;
 
-    public class Node
+    internal class Node
     {
         public Node(int x, int y, bool belongsToShape)
         {

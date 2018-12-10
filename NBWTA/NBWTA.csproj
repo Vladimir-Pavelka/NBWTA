@@ -49,6 +49,9 @@
     <Compile Include="ChokePointsDetection\ChokeBorder.cs" />
     <Compile Include="ChokePointsDetection\ChokePointsDetector.cs" />
     <Compile Include="IMapAnalyzer.cs" />
+    <Compile Include="Result\ChokeRegion.cs" />
+    <Compile Include="Result\MapRegion.cs" />
+    <Compile Include="Result\RegionBase.cs" />
     <Compile Include="Utils\Clustering.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Mappings\Mapping.cs" />

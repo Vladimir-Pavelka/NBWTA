@@ -3,7 +3,7 @@
     using DistanceTransformation;
     using Graph;
 
-    public class ChokeBorder
+    internal class ChokeBorder
     {
         public Node Start { get; }
         public Node End { get; }

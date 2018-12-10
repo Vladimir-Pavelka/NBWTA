@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public static class Clustering
+    internal static class Clustering
     {
         public static IReadOnlyCollection<HashSet<TElem>> Cluster<TElem>(IReadOnlyCollection<TElem> elements, Func<TElem, TElem, bool> areInRelation)
         {

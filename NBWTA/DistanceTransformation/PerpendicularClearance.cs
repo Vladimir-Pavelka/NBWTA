@@ -6,7 +6,7 @@
     using System.Linq;
     using Utils;
 
-    public class PerpendicularClearance
+    internal class PerpendicularClearance
     {
         private const int MaxSteps = 60;
 

@@ -4,7 +4,7 @@
     using System.Linq;
     using Utils;
 
-    public static class DistanceTransform
+    internal static class DistanceTransform
     {
         private static readonly Clearance _outOfBoundaryClearance = new Clearance();
 

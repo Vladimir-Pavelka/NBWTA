@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Graph;
 
-    public class Choke
+    internal class Choke
     {
         public ChokeBorder Border { get; }
         public IReadOnlyCollection<Node> Fill { get; }

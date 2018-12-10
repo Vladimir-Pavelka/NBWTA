@@ -6,7 +6,7 @@
     using Graph;
     using Utils;
 
-    public static class Pruning
+    internal static class Pruning
     {
         public static IReadOnlyCollection<Vertex> Prune(IReadOnlyCollection<Vertex> skeleton, Clearance[,] clearance, int pruneDistance)
         {

@@ -14,6 +14,14 @@
             }
         }
 
+        public static void ForEach<TElement>(this IEnumerable<TElement> source, Action<TElement, int> action)
+        {
+            foreach (var item in source.Select((x, idx) => (value:x, idx:idx)))
+            {
+                action(item.value, item.idx);
+            }
+        }
+
         public static void ForEach<TElement>(this TElement[,] array, Action<int, int, TElement> action)
         {
             var width = array.GetLength(0);
@@ -96,7 +104,6 @@
 
         public static IReadOnlyCollection<HashSet<TElem>> Cluster<TElem>(this IReadOnlyCollection<TElem> elements, Func<TElem, TElem, bool> areInRelation) =>
             Clustering.Cluster(elements, areInRelation);
-
 
         public static ((int x, int y) topLeft, (int x, int y) botRight) BoundingBox(this IReadOnlyCollection<(int x, int y)> points)
         {

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Vertex
+    internal class Vertex
     {
         public Node Node { get; }
         public IReadOnlyCollection<Edge> Edges { get; set; } = new List<Edge>();

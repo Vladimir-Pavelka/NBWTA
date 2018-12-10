@@ -4,7 +4,7 @@
     using System.Linq;
     using Utils;
 
-    public static class GridGraph
+    internal static class GridGraph
     {
         private static readonly Node OutOfBoundaryNode = new Node(-1, -1, false);
 
