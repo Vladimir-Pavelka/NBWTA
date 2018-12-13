@@ -8,6 +8,7 @@
         {
         }
 
-        public IReadOnlyCollection<ChokeRegion> AdjacentChokes { get; internal set; }
+        public IReadOnlyCollection<ChokeRegion> AdjacentChokes { get; internal set; } = new List<ChokeRegion>();
+        public IReadOnlyCollection<ResourceSite> ResourceSites { get; internal set; } = new List<ResourceSite>();
     }
 }

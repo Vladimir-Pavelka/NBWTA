@@ -93,7 +93,7 @@
 
                 var end = edge.Path.ToList().IterateRight(lo.idx).Where(clearanceMap.ContainsKey).TakeWhile(n =>
                     clearanceMap[n].Count < TakeChokeAdjacentWidth(clearanceMap[lo.node].Count)).Last();
-                return new ChokeBorder(start, end, 0, clearanceMap[start], clearanceMap[end]);
+                return new ChokeBorder(start, end, 0, 0, clearanceMap[start], clearanceMap[end], null);
             }).ToList();
 
             var chokeStartEndIndices = chokes.Select(ch => GetStartEndIndices(ch, edge)).ToList();
@@ -109,7 +109,19 @@
                 var newStart = unionStart.choke.Start;
                 var newEnd = unionEnd.choke.End;
 
-                return new ChokeBorder(newStart, newEnd, chokeLength, clearanceMap[newStart], clearanceMap[newEnd]);
+                var chokeClearanceRange = edge.Path.ToList()
+                    .GetRange(unionStart.startIdx, unionEnd.endIdx - unionStart.startIdx)
+                    .Where(clearanceMap.ContainsKey).Select(x => clearanceMap[x]).ToList();
+
+                var avgWidth = chokeClearanceRange.Any()
+                    ? chokeClearanceRange.Average(c => c.Count)
+                    : unionStart.choke.StartBorder.Count;
+
+                var minWidthLine = chokeClearanceRange.Any()
+                    ? chokeClearanceRange.OrderBy(c => c.Count).First()
+                    : unionStart.choke.StartBorder;
+
+                return new ChokeBorder(newStart, newEnd, chokeLength, avgWidth, clearanceMap[newStart], clearanceMap[newEnd], minWidthLine);
             });
 
             return overlappingChokesMerged;

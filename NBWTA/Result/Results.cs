@@ -27,7 +27,11 @@
             var contentTiles = choke.Fill.Select(n => (n.X, n.Y)).ToHashSet();
             var regionEdge = choke.Border.StartBorder.WholeLine.Concat(choke.Border.EndBorder.WholeLine)
                 .Select(n => (n.X, n.Y)).ToList();
-            return new ChokeRegion(contentTiles, regionEdge);
+
+            var minWidthLine = choke.Border.NarrowestSection.WholeLine.Select(p => (p.X, p.Y)).ToList();
+            var avgWidth = choke.Border.AvgWidth;
+
+            return new ChokeRegion(contentTiles, regionEdge, minWidthLine, avgWidth);
         }
 
         private static MapRegion CreateMapRegion(Region<Node> region)
@@ -62,6 +66,22 @@
                 .Select(ch => chokeMap[ch]).ToList();
 
             return adjacentChokes;
+        }
+
+        public static void AssignResourceSitesToContainingRegions(IEnumerable<ResourceSite> resourceClusters,
+            IDictionary<(int x, int y), MapRegion> buildTileRegionMap)
+        {
+            resourceClusters
+                .GroupBy(cluster => FindContainingRegion(cluster, buildTileRegionMap))
+                .Where(g => g.Key != null)
+                .ForEach(g => g.Key.ResourceSites = g.ToList());
+        }
+
+        private static MapRegion FindContainingRegion(ResourceSite site, IDictionary<(int x, int y), MapRegion> buildTileRegionMap)
+        {
+            var resourceInRegion = site.MineralsBuildTiles.Concat(site.GeysersBuildTiles)
+                .FirstOrNull(buildTileRegionMap.ContainsKey);
+            return resourceInRegion == null ? null : buildTileRegionMap[resourceInRegion.Value];
         }
     }
 }

@@ -10,6 +10,7 @@
     using MapPreprocessing;
     using MedialAxisPruning;
     using RegionDetection;
+    using Resources;
     using Result;
     using Skeletonization;
     using Utils;
@@ -18,10 +19,15 @@
     {
         private const int ShrinkMinClearance = 3;
         private const int PruningMinClearance = 15;
+        private const int BuildTileToWalktileRatio = 4;
 
-        public AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkTileWalkable)
+
+        public AnalyzedMap Analyze(int widthWalkTiles, int heightWalkTiles, Func<(int x, int y), bool> isWalkTileWalkable,
+            IReadOnlyCollection<(int x, int y)> mineralsToConsiderBuildTiles = null,
+            IReadOnlyCollection<(int x, int y)> geysersToConsiderBuildTiles = null,
+            Func<(int x, int y), bool> isBuildTileBuildable = null)
         {
-            var map = Create2DBoolMap(width, height, isWalkTileWalkable);
+            var map = Create2DBoolMap(widthWalkTiles, heightWalkTiles, isWalkTileWalkable);
             var preprocessedMap = Preprocessing.RemoveTinyIsolatedObstacles(map);
             var clearance = DistanceTransform.Process(preprocessedMap);
             var graphEightNeighbors = GridGraph.Convert(preprocessedMap, NeighborsMode.EightNeighbors); // TODO: we dont even really need the mode
@@ -32,12 +38,12 @@
 
             var graphFourNeighbors = GridGraph.Convert(preprocessedMap, NeighborsMode.FourNeighbors); // TODO: we dont even really need the mode
             var chokeBorders = ChokePointsDetector.GetChokeBorders(prunedSkeleton, tile => IsWallOrOutOfBounds(tile, preprocessedMap));
-            var tileIsChokeMap = Mapping.CreateTileIsChokeMap(width, height, chokeBorders);
-            SetChokeTilesAsWall(graphFourNeighbors, tileIsChokeMap);
-            var tileNodeMap = Mapping.CreateTileNodeMap(width, height, graphFourNeighbors);
+            var tileIsChokeMap = Mapping.CreateTileIsChokeMap(widthWalkTiles, heightWalkTiles, chokeBorders);
+            SetChokeBordersAsWall(graphFourNeighbors, tileIsChokeMap);
+            var tileNodeMap = Mapping.CreateTileNodeMap(widthWalkTiles, heightWalkTiles, graphFourNeighbors);
 
             var allRegions = RegionDetector.FindRegions(graphFourNeighbors, tileNodeMap, (x, y) => tileNodeMap[x, y].BelongsToShape).ToList();
-            var pointRegionMap = Mapping.CreateNodeRegionMap(width, height, allRegions);
+            var pointRegionMap = Mapping.CreateNodeRegionMap(widthWalkTiles, heightWalkTiles, allRegions);
             var chokeRegionMap = Mapping.CreateChokeRegionMap(chokeBorders, pointRegionMap);
             var regionChokeMap = Mapping.CreateRegionChokeMap(chokeRegionMap);
 
@@ -46,8 +52,18 @@
             var allChokeNodes = chokes.SelectMany(ch => ch.Fill).ToHashSet();
             var nonChokeRegions = allRegions.Where(r => !allChokeNodes.Contains(r.Nodes.First()));
 
-            var analyzedMap = Results.Create(chokes, nonChokeRegions, chokeRegionMap, allChokeNodes,
-                regionChokeMap, borderChokeMap);
+            var analyzedMap = Results.Create(chokes, nonChokeRegions, chokeRegionMap, allChokeNodes, regionChokeMap, borderChokeMap);
+
+            var shouldPerformResourceAnalysis = new object[]
+                {mineralsToConsiderBuildTiles, geysersToConsiderBuildTiles, isBuildTileBuildable}.All(x => x != null);
+            if (!shouldPerformResourceAnalysis) return analyzedMap;
+
+            var buildTileRegionMap = Mapping.CreateBuildTileRegionMap(analyzedMap.MapRegions);
+            var resourceSites = ResourceSites.Analyze(widthWalkTiles / BuildTileToWalktileRatio,
+                heightWalkTiles / BuildTileToWalktileRatio, mineralsToConsiderBuildTiles,
+                geysersToConsiderBuildTiles, isBuildTileBuildable, buildTileRegionMap);
+
+            Results.AssignResourceSitesToContainingRegions(resourceSites, buildTileRegionMap);
 
             return analyzedMap;
         }
@@ -85,7 +101,7 @@
             return !map[tile.X, tile.Y];
         }
 
-        private static void SetChokeTilesAsWall(IEnumerable<Node> nodes, bool[,] tileIsChokeMap) =>
+        private static void SetChokeBordersAsWall(IEnumerable<Node> nodes, bool[,] tileIsChokeMap) =>
             nodes.Where(n => tileIsChokeMap[n.X, n.Y]).ForEach(n => n.BelongsToShape = false);
     }
 }

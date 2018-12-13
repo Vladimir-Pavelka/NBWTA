@@ -5,10 +5,13 @@
     using ChokePointsDetection;
     using Graph;
     using RegionDetection;
+    using Result;
     using Utils;
 
     internal static class Mapping
     {
+        private const int BuildTileToWalktileRatio = 4;
+
         public static bool[,] CreateTileIsChokeMap(int width, int height, IEnumerable<ChokeBorder> chokes)
         {
             var chokePointsMap = new bool[width, height];
@@ -29,6 +32,18 @@
             regions.SelectMany(r => r.Nodes.Select(n => (node: n, region: r))).ForEach(tuple => nodeRegionMap[tuple.node.X, tuple.node.Y] = tuple.region);
             return nodeRegionMap;
         }
+
+        public static IDictionary<(int x, int y), MapRegion> CreateBuildTileRegionMap(IEnumerable<MapRegion> regions)
+        {
+            var walkTileRegionMap = regions.SelectMany(r => r.ContentTiles.Select(walkTile => (tile: ToBuildTile(walkTile), region: r)))
+                .GroupBy(x => x.tile)
+                .Select(g => (tile: g.Key, region: g.First().region))
+                .ToDictionary(x => x.tile, x => x.region);
+
+            return walkTileRegionMap;
+        }
+
+        private static (int x, int y) ToBuildTile((int x, int y) walkTile) => (walkTile.x / BuildTileToWalktileRatio, walkTile.y / BuildTileToWalktileRatio);
 
         // TODO: improve code
         public static IDictionary<ChokeBorder, (Region<Node>[] left, Region<Node>[] right)> CreateChokeRegionMap(IEnumerable<ChokeBorder> chokes, Region<Node>[,] pointRegionMap)

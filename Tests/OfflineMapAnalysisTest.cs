@@ -70,15 +70,20 @@
             var inputMapBitmap = new Bitmap(Image.FromFile(mapFile));
 
             var walkabilityMap = ToWalkabilityMap(inputMapBitmap);
+            //var mineralBuildTiles = GetResourceBuildTiles(inputMapBitmap, Mineral).ToList();
+            //var geyserBuildTiles = GetResourceBuildTiles(inputMapBitmap, Geyser).ToList();
+            //bool IsBuildTileBuildable((int x, int y) buildTile) => walkabilityMap[ToWalkTile(buildTile).x, ToWalkTile(buildTile).y];
 
             AnalyzedMap result = null;
             var elapsedMs = MeasureElapsedMs(() =>
                 result = algorithm.Analyze(inputMapBitmap.Width, inputMapBitmap.Height, tile => walkabilityMap[tile.x, tile.y]));
+                    //,mineralBuildTiles, geyserBuildTiles, IsBuildTileBuildable));
 
             _console.WriteLine($"{mapName}: {elapsedMs}ms");
 
             FillChokesIntoBitmap(result.ChokeRegions, inputMapBitmap);
             FillRegionsIntoBitmap(result.MapRegions, inputMapBitmap);
+            //FillResourceDepotsIntoBitmap(result.MapRegions, inputMapBitmap);
 
             Directory.CreateDirectory(ResultFolder);
             inputMapBitmap.Save(ResultFolder + outputFileName);
@@ -97,7 +102,10 @@
 
             for (var column = 0; column < inputBitmap.Width; column++)
                 for (var row = 0; row < inputBitmap.Height; row++)
-                    walkabilityMap[column, row] = IsWalkable(inputBitmap.GetPixel(column, row));
+                {
+                    var pixel = inputBitmap.GetPixel(column, row);
+                    walkabilityMap[column, row] = IsWalkable(pixel) || IsResource(pixel);
+                }
 
             return walkabilityMap;
         }
@@ -122,5 +130,39 @@
 
             return colorPresets[idx % colorPresets.Length];
         }
+
+        private static readonly Color Mineral = Color.DodgerBlue;
+        private static readonly Color Geyser = Color.Green;
+        private const int BuildTileToWalktileRatio = 4;
+
+        private static IEnumerable<(int x, int y)> GetResourceBuildTiles(Bitmap inputBitmap, Color resourceColor)
+        {
+            for (var column = 0; column < inputBitmap.Width; column++)
+                for (var row = 0; row < inputBitmap.Height; row++)
+                    if (inputBitmap.GetPixel(column, row).ToArgb() == resourceColor.ToArgb())
+                        yield return ToBuildTile((column, row));
+        }
+
+        private static bool IsResource(Color color) =>
+            new[] { Mineral, Geyser }.Any(c => c.ToArgb() == color.ToArgb());
+
+
+        private static void FillResourceDepotsIntoBitmap(IReadOnlyCollection<MapRegion> resultMapRegions, Bitmap inputBitmap)
+        {
+            resultMapRegions.SelectMany(r => r.ResourceSites)
+            .Select(rc => ToWalkTile(rc.OptimalResourceDepotBuildTile))
+                .SelectMany(d => YieldFill(d, 16, 12))
+                .ForEach(wt => inputBitmap.SetPixel(wt.x, wt.y, Color.Lime));
+        }
+
+        private static IEnumerable<(int x, int y)> YieldFill((int x, int y) topLeft, int width, int height)
+        {
+            for (var x = topLeft.x; x <= topLeft.x + width - 1; x++)
+                for (var y = topLeft.y; y <= topLeft.y + height - 1; y++)
+                    yield return (x, y);
+        }
+
+        private static (int x, int y) ToBuildTile((int x, int y) walkTile) => (walkTile.x / BuildTileToWalktileRatio, walkTile.y / BuildTileToWalktileRatio);
+        private static (int x, int y) ToWalkTile((int x, int y) buildTile) => (buildTile.x * BuildTileToWalktileRatio, buildTile.y * BuildTileToWalktileRatio);
     }
 }

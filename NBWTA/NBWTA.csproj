@@ -49,11 +49,15 @@
     <Compile Include="ChokePointsDetection\ChokeBorder.cs" />
     <Compile Include="ChokePointsDetection\ChokePointsDetector.cs" />
     <Compile Include="IMapAnalyzer.cs" />
+    <Compile Include="Resources\ResourceSites.cs" />
+    <Compile Include="Resources\ResourceDepotPlacement.cs" />
     <Compile Include="Result\ChokeRegion.cs" />
     <Compile Include="Result\MapRegion.cs" />
     <Compile Include="Result\RegionBase.cs" />
+    <Compile Include="Result\ResourceSite.cs" />
     <Compile Include="Result\Results.cs" />
     <Compile Include="Utils\Clustering.cs" />
+    <Compile Include="Utils\Distances.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Mappings\Mapping.cs" />
     <Compile Include="DistanceTransformation\Clearance.cs" />

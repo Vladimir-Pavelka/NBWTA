@@ -28,7 +28,7 @@
         public IReadOnlyCollection<Point> Left { get; }
         public IReadOnlyCollection<Point> Right { get; }
         public IReadOnlyCollection<Point> WholeLine { get; }
-        public int Count => 1 + Left.Count + Right.Count;
+        public int Count => WholeLine.Count;
 
         public PerpendicularClearance(Point middle, IReadOnlyCollection<Point> left, IReadOnlyCollection<Point> right)
         {

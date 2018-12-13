@@ -115,5 +115,15 @@
 
             return ((minX, minY), (maxX, maxY));
         }
+
+        internal static T? FirstOrNull<T>(this IEnumerable<T> source, Func<T, bool> predicate) where T : struct
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            foreach (var item in source)
+                if (predicate(item)) return item;
+
+            return null;
+        }
     }
 }
