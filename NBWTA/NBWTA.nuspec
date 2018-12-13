@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>NBWTA</id>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <title>NBWTA</title>
     <authors>Vladimir Pavelka</authors>
     <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
@@ -16,7 +16,7 @@
 
       * Added resource sites + optimal resource depot placement
 
-      * Increased ResourceDistanceTreshold in resource sites clustering algo from 6 to 8 BuildTiles
+      * Increased ResourceDistanceTreshold in resource sites clustering algo from 6 to 9 BuildTiles
     </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Choke Detection Region BroodWar Map Analysis</tags>

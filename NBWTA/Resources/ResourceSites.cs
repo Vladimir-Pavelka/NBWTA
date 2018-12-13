@@ -8,7 +8,7 @@
 
     internal static class ResourceSites
     {
-        private const int ResourceDistanceTresholdBuildTiles = 8;
+        private const int ResourceDistanceTresholdBuildTiles = 9;
 
         public static IEnumerable<ResourceSite> Analyze(int mapWidth, int mapHeight,
             IReadOnlyCollection<(int x, int y)> mineralsToConsiderBuildTiles,
