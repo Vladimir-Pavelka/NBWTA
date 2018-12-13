@@ -19,9 +19,9 @@
         private const int ShrinkMinClearance = 3;
         private const int PruningMinClearance = 15;
 
-        public AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkable)
+        public AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkTileWalkable)
         {
-            var map = Create2DBoolMap(width, height, isWalkable);
+            var map = Create2DBoolMap(width, height, isWalkTileWalkable);
             var preprocessedMap = Preprocessing.RemoveTinyIsolatedObstacles(map);
             var clearance = DistanceTransform.Process(preprocessedMap);
             var graphEightNeighbors = GridGraph.Convert(preprocessedMap, NeighborsMode.EightNeighbors); // TODO: we dont even really need the mode
@@ -42,13 +42,14 @@
             var regionChokeMap = Mapping.CreateRegionChokeMap(chokeRegionMap);
 
             var chokes = ChokePointsDetector.CreateFilledChokeRegions(chokeBorders, chokeRegionMap, regionChokeMap, tileNodeMap);
+            var borderChokeMap = chokeBorders.Zip(chokes, (a, b) => (key: a, value: b)).ToDictionary(x => x.key, x => x.value);
             var allChokeNodes = chokes.SelectMany(ch => ch.Fill).ToHashSet();
             var nonChokeRegions = allRegions.Where(r => !allChokeNodes.Contains(r.Nodes.First()));
 
-            var chokeRegions = CreateChokeRegions(chokes);
-            var mapRegions = CreateMapRegions(nonChokeRegions);
+            var analyzedMap = Results.Create(chokes, nonChokeRegions, chokeRegionMap, allChokeNodes,
+                regionChokeMap, borderChokeMap);
 
-            return new AnalyzedMap(mapRegions, chokeRegions);
+            return analyzedMap;
         }
 
         private static bool[,] Create2DBoolMap(int width, int height, Func<(int x, int y), bool> isWalkable)
@@ -86,24 +87,5 @@
 
         private static void SetChokeTilesAsWall(IEnumerable<Node> nodes, bool[,] tileIsChokeMap) =>
             nodes.Where(n => tileIsChokeMap[n.X, n.Y]).ForEach(n => n.BelongsToShape = false);
-
-        private static IReadOnlyCollection<ChokeRegion> CreateChokeRegions(IEnumerable<Choke> chokes) =>
-            chokes.Select(ch =>
-            {
-                var contentTiles = ch.Fill.Select(n => (n.X, n.Y)).ToHashSet();
-                var regionEdge = ch.Border.StartBorder.WholeLine.Concat(ch.Border.EndBorder.WholeLine)
-                    .Select(n => (n.X, n.Y)).ToList();
-                return new ChokeRegion(contentTiles, regionEdge);
-            }).ToList();
-
-        private static IReadOnlyCollection<MapRegion> CreateMapRegions(IEnumerable<Region<Node>> nonChokeRegions) =>
-            nonChokeRegions.Select(r =>
-            {
-                var contentTiles = r.Nodes.Select(n => (n.X, n.Y)).ToHashSet();
-                var regionEdge = GetRegionEdge(r).Select(n => (n.X, n.Y)).ToList();
-                return new MapRegion(contentTiles, regionEdge);
-            }).ToList();
-
-        private static IEnumerable<Node> GetRegionEdge(Region<Node> region) => region.Nodes.Where(n => n.Neighbors.Any(nn => !nn.BelongsToShape));
     }
 }

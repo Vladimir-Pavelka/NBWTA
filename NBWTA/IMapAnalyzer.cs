@@ -5,6 +5,6 @@
 
     public interface IMapAnalyzer
     {
-        AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkable);
+        AnalyzedMap Analyze(int width, int height, Func<(int x, int y), bool> isWalkTileWalkable);
     }
 }
