@@ -35,7 +35,7 @@
             Middle = middle;
             Left = left;
             Right = right;
-            WholeLine = left.Concat(middle.Yield()).Concat(right).ToList();
+            WholeLine = left.Reverse().Concat(middle.Yield()).Concat(right).ToList();
         }
     }
 }
