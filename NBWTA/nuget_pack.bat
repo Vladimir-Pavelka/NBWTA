@@ -1,0 +1,1 @@
+nuget pack NBWTA.csproj -properties Configuration=Release
