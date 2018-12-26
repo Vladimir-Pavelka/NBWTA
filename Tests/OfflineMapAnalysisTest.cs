@@ -6,6 +6,7 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
+    using FluentAssertions;
     using NBWTA;
     using NBWTA.Result;
     using NBWTA.Utils;
@@ -31,6 +32,9 @@
         private const string Heartwood = BwMapsFolder + "/Heartwood/Heartwood_walls.bmp";
         private const string PrimevalIsles = BwMapsFolder + "/PrimevalIsles/PrimevalIsles_walls.bmp";
         private const string RiverCrossing = BwMapsFolder + "/RiverCrossing/RiverCrossing_walls.bmp";
+        private const string Aztec = BwMapsFolder + "/Aztec/Aztec_walls.bmp";
+        private const string Benzene = BwMapsFolder + "/Benzene/Benzene_walls.bmp";
+        private const string HeartbreakRidge = BwMapsFolder + "/HeartbreakRidge/HeartbreakRidge_walls.bmp";
 
         private const string ResultFolder = "../../MapAnalysisResults/";
 
@@ -42,26 +46,31 @@
         }
 
         [Theory]
-        [InlineData(nameof(AstralBalance), AstralBalance)]
+        //[InlineData(nameof(AstralBalance), AstralBalance)]
         [InlineData(nameof(CircuitBreaker), CircuitBreaker)]
         [InlineData(nameof(Hunters), Hunters)]
-        [InlineData(nameof(LostTemple), LostTemple)]
+        //[InlineData(nameof(LostTemple), LostTemple)]
         [InlineData(nameof(FightingSpirit), FightingSpirit)]
-        //[InlineData(nameof(Homeworld), Homeworld)]
+        ////[InlineData(nameof(Homeworld), Homeworld)]
         [InlineData(nameof(Python), Python)]
-        [InlineData(nameof(CrescentMoon), CrescentMoon)]
-        [InlineData(nameof(BloodBath), BloodBath)]
-        [InlineData(nameof(OrbitalGully), OrbitalGully)]
-        [InlineData(nameof(AlphaDraconis), AlphaDraconis)]
-        [InlineData(nameof(Bottleneck), Bottleneck)]
-        [InlineData(nameof(Heartwood), Heartwood)]
-        //[InlineData(nameof(PrimevalIsles), PrimevalIsles)]
-        [InlineData(nameof(RiverCrossing), RiverCrossing)]
+        //[InlineData(nameof(CrescentMoon), CrescentMoon)]
+        //[InlineData(nameof(BloodBath), BloodBath)]
+        //[InlineData(nameof(OrbitalGully), OrbitalGully)]
+        //[InlineData(nameof(AlphaDraconis), AlphaDraconis)]
+        //[InlineData(nameof(Bottleneck), Bottleneck)]
+        //[InlineData(nameof(Heartwood), Heartwood)]
+        ////[InlineData(nameof(PrimevalIsles), PrimevalIsles)]
+        //[InlineData(nameof(RiverCrossing), RiverCrossing)]
+        [InlineData(nameof(Aztec), Aztec)]
+        [InlineData(nameof(Benzene), Benzene)]
+        [InlineData(nameof(HeartbreakRidge), HeartbreakRidge)]
         public void AnalyzeBatch(string mapName, string mapFile)
         {
             AnalyzeSingle(mapName, mapFile);
         }
 
+        [Theory]
+        [InlineData(nameof(Hunters), Hunters)]
         private void AnalyzeSingle(string mapName, string mapFile)
         {
             var outputFileName = mapName + ".bmp";
@@ -77,7 +86,11 @@
             AnalyzedMap result = null;
             var elapsedMs = MeasureElapsedMs(() =>
                 result = algorithm.Analyze(inputMapBitmap.Width, inputMapBitmap.Height, tile => walkabilityMap[tile.x, tile.y]));
-                    //,mineralBuildTiles, geyserBuildTiles, IsBuildTileBuildable));
+            //,mineralBuildTiles, geyserBuildTiles, IsBuildTileBuildable));
+
+            result.SaveToFile(ResultFolder + mapName + ".dat");
+            var deserialized = AnalyzedMap.TryLoadFromFile(ResultFolder + mapName + ".dat");
+            deserialized.HasValue.Should().BeTrue();
 
             _console.WriteLine($"{mapName}: {elapsedMs}ms");
 
