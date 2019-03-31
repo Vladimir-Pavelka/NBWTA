@@ -20,7 +20,7 @@ bool IsTileWalkable((int x, int y) tile) => Game.IsWalkable(tile.x, tile.x);
 var mapAnalyzer = new MapAnalyzer();
 AnalyzedMap analyzedMap = mapAnalyzer.Analyze(mapWidthWalkTiles, mapHeightWalkTiles, IsTileWalkable);
 ```
-The result of type [`AnalyzedMap`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/AnalyzedMap.cs) holds the information about found choke points ([`ChokeRegion`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/ChokeRegion.cs)) and map regions ([`MapRegion`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/MapRegion.cs)), alongside the functionality to load and persist this to a file.
+The resulting [`AnalyzedMap`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/AnalyzedMap.cs) holds the information about found choke points ([`ChokeRegion`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/ChokeRegion.cs)) and map regions ([`MapRegion`](https://github.com/Vladimir-Pavelka/NBWTA/blob/master/NBWTA/Result/MapRegion.cs)), alongside the functionality to load and persist this to a file.
 ```csharp
 public class AnalyzedMap
 {
