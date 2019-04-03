@@ -15,7 +15,7 @@ Map | | Analyzed
 ```csharp
 var mapWidthWalkTiles = Game.MapWidth * 4;
 var mapHeightWalkTiles = Game.MapHeight * 4;
-bool IsTileWalkable((int x, int y) tile) => Game.IsWalkable(tile.x, tile.x);
+bool IsTileWalkable((int x, int y) tile) => Game.IsWalkable(tile.x, tile.y);
 
 var mapAnalyzer = new MapAnalyzer();
 AnalyzedMap analyzedMap = mapAnalyzer.Analyze(mapWidthWalkTiles, mapHeightWalkTiles, IsTileWalkable);
