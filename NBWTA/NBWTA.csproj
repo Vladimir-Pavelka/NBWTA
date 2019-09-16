@@ -55,6 +55,7 @@
     <Compile Include="Resources\ResourceSites.cs" />
     <Compile Include="Resources\ResourceDepotPlacement.cs" />
     <Compile Include="ResultPersister\FilePersister.cs" />
+    <Compile Include="Result\BaseInfo.cs" />
     <Compile Include="Result\ChokeRegion.cs" />
     <Compile Include="Result\Result.cs" />
     <Compile Include="Result\MapRegion.cs" />
