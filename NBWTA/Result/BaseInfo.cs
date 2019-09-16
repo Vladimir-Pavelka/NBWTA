@@ -42,12 +42,27 @@
         public MapRegion StartLocationRegion { get; }
 
         /// <summary>
-        /// MapRegions containing resources, adjacent to the StartLocationRegion
-        /// There can be 0, 1 or more NaturalExpansions, based on the map shape.
+        /// MapRegion(s) with resources, adjacent to the StartLocationRegion
+        /// There can be 0, 1 or more NaturalExpansion(s), based on the map shape (normally, there is 1).
         /// </summary>
         public IReadOnlyCollection<MapRegion> NaturalExpansions { get; }
+
+        /// <summary>
+        /// ChokeRegion(s) connecting StartLocationRegion with NaturalExpansion(s).
+        /// There can be 0, 1 or more Choke(s)BetweenMainAndNatural(s), based on the map shape (normally, there is 1).
+        /// </summary>
         public IReadOnlyCollection<ChokeRegion> ChokesBetweenMainAndNaturals { get; }
+
+        /// <summary>
+        /// Adjacent ChokeRegion(s) of NaturalExpansion(s), which are not connecting to the StartLocationRegion, and are not connecting other NaturalExpansion(s) to each other (in case of multiple)
+        /// There can be 0, 1 or more OutsideEntrancesToNaturals, based on the map shape (normally, there is 1).
+        /// </summary>
         public IReadOnlyCollection<ChokeRegion> OutsideEntrancesToNaturals { get; }
+
+        /// <summary>
+        /// Internal ChokeRegion connections between 
+        /// There can be 0, 1 or more OutsideEntrancesToNaturals, based on the map shape (normally, there is 0).
+        /// </summary>
         public IReadOnlyCollection<ChokeRegion> InsideConnectorsBetweenNaturals { get; }
     }
 }
