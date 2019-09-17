@@ -10,7 +10,14 @@
             OutlineTiles = outlineTiles ?? new List<(int x, int y)>();
         }
 
+        /// <summary>
+        /// Walktiles inside this region (including OutlineTiles). 
+        /// </summary>
         public HashSet<(int x, int y)> ContentTiles { get; }
+
+        /// <summary>
+        /// Border walktiles at the edge of this region.
+        /// </summary>
         public IReadOnlyCollection<(int x, int y)> OutlineTiles { get; }
     }
 }

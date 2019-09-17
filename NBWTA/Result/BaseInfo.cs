@@ -37,31 +37,31 @@
         }
 
         /// <summary>
-        /// Region representing the main base start location
+        /// Region representing the main base start location.
         /// </summary>
         public MapRegion StartLocationRegion { get; }
 
         /// <summary>
-        /// MapRegion(s) with resources, adjacent to the StartLocationRegion
-        /// There can be 0, 1 or more NaturalExpansion(s), based on the map shape (normally, there is 1).
+        /// MapRegion(s) with resources, adjacent to the StartLocationRegion.
+        /// Normally there is 1, but there can be 0, 1 or more, based on the map shape.
         /// </summary>
         public IReadOnlyCollection<MapRegion> NaturalExpansions { get; }
 
         /// <summary>
         /// ChokeRegion(s) connecting StartLocationRegion with NaturalExpansion(s).
-        /// There can be 0, 1 or more Choke(s)BetweenMainAndNatural(s), based on the map shape (normally, there is 1).
+        /// Normally there is 1, but there can be 0, 1 or more based on the map shape.
         /// </summary>
         public IReadOnlyCollection<ChokeRegion> ChokesBetweenMainAndNaturals { get; }
 
         /// <summary>
-        /// Adjacent ChokeRegion(s) of NaturalExpansion(s), which are not connecting to the StartLocationRegion, and are not connecting other NaturalExpansion(s) to each other (in case of multiple)
-        /// There can be 0, 1 or more OutsideEntrancesToNaturals, based on the map shape (normally, there is 1).
+        /// ChokeRegion(s) connecting NaturalExpansion(s) to "outside" MapRegions (i.e. not StartLocationRegion, not other NaturalExpansions).
+        /// Normally there is 1, but there can be 0, 1 or more based on the map shape.
         /// </summary>
         public IReadOnlyCollection<ChokeRegion> OutsideEntrancesToNaturals { get; }
 
         /// <summary>
-        /// Internal ChokeRegion connections between 
-        /// There can be 0, 1 or more OutsideEntrancesToNaturals, based on the map shape (normally, there is 0).
+        /// Internal ChokeRegion connections between NaturalExpansions (in case of multiple).
+        /// Normally there is 0, but there can be 0, 1 or more, based on the map shape.
         /// </summary>
         public IReadOnlyCollection<ChokeRegion> InsideConnectorsBetweenNaturals { get; }
     }

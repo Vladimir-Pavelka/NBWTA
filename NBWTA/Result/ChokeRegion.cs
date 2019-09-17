@@ -12,8 +12,19 @@
             AverageWidthInWalkTiles = averageWidthInWalkTiles;
         }
 
+        /// <summary>
+        /// The two MapRegions connected by this choke-point.
+        /// </summary>
         public IReadOnlyCollection<MapRegion> AdjacentRegions { get; internal set; }
+
+        /// <summary>
+        /// A perpendicular line of WalkTiles, placed at the narrowest point of this choke-point.
+        /// </summary>
         public IReadOnlyCollection<(int x, int y)> MinWidthWalkTilesLine { get; }
+
+        /// <summary>
+        /// The average perpendicular width of this choke-point, measured in WalkTiles.
+        /// </summary>
         public double AverageWidthInWalkTiles { get; }
     }
 }
