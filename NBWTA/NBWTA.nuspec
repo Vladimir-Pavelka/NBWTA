@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>NBWTA</id>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
     <title>NBWTA</title>
     <authors>Vladimir Pavelka</authors>
     <license type="expression">MIT</license>
@@ -11,6 +11,10 @@
     <description>Brood War Terrain Analyzer written in .NET (choke points, regions detection)</description>
     <summary>Brood War Terrain Analyzer written in .NET (choke points, regions detection)</summary>
     <releaseNotes>
+      * Added Documentation headers on public types
+
+      * Added AnalyzedMap.GetBaseInfoByStartLocationWalkTile(): BaseInfo
+
       * Added Region -> adjacent chokes
       Choke -> adjacent regions
 
